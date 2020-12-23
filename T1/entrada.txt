@@ -1,0 +1,7 @@
+a$_$ = "Um texto";
+SEPARADOR
+_$ = "Uma String" + "outra\t string";
+SEPARADOR
+a = "Um \"texto";
+SEPARADOR
+a = "Um ""texto \o/ //\\";
