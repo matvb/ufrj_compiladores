@@ -20,7 +20,7 @@ void F();
 void erro();
 void casa( int );
 
-enum { tk_int = 256, tk_id, tk_num, tk_print, tk_endl};
+enum { tk_int = 256, tk_id, tk_num, tk_print, tk_func, tk_string, tk_endl};
 
 string lexema;
 
@@ -28,6 +28,8 @@ map<int,string> nome_tokens = {
   { tk_id, "nome de identificador" },
   { tk_num, "constante inteira" },
   { tk_print, "funcao print" },
+  { tk_func, "funcoes" },
+  { tk_string, "String" },
   { tk_endl, "ponto e virgula" }
 };
 
@@ -40,11 +42,16 @@ LETRA	[A-Za-z_]
 NUM	{DIGITO}+("."{DIGITO}+)?
 ID	{LETRA}({LETRA}|{DIGITO})*
 
+STRING ["]({ID}|[ !,.?:])*["]
+
 %%
 
 {WS}  		{ }
 {NUM} 		{ return tk_num; }
 "print"   { return tk_print; }
+"max"     { return tk_func; }
+"dtos"    { return tk_func; }
+{STRING}  { return tk_string; }
 ";"       { return tk_endl; }
 {ID}		  { return tk_id; }
 
@@ -182,6 +189,23 @@ void F() {
       string temp = lexema;
       casa( tk_num ); print( temp ); }
       break;
+    case tk_string : {
+      string temp = lexema;
+      casa( tk_string ); print( temp ); }
+      break;
+    case tk_func : {
+      string temp = lexema;
+      casa(tk_func); 
+      casa( '(' );
+      E();
+      if (temp == "max") {
+        casa ( ',' );
+        E();
+      }      
+      casa ( ')' );
+      print( temp + " #" );
+      break;
+    }
     case '(': 
       casa( '(' ); E(); casa ( ')' ); break;
     default:
@@ -206,18 +230,7 @@ void erro() {
 
 int main() {
   token = next_token();
-  //cout << "=== Código ===" << endl;
   S();
-  //cout << endl;
-  //cout << "=== Console ===" << endl;
-  //cout << "=== Vars ===" << endl ;
-  //cout << "=== Pilha ===" << endl ;
-
-  /*
-  if( token == 0 )
-    cout << "Sintaxe ok!" << endl;
-  else
-    cout << "Caracteres encontrados após o final do programa" << endl;
-  */
+  
   return 0;
 }
