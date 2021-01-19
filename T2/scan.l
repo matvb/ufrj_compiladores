@@ -135,7 +135,7 @@ void C() {
 void P() {
   casa( tk_print );
   E();
-  print( "print" );
+  print( "print #" );
 }
 
 void A() {
@@ -206,12 +206,12 @@ void erro() {
 
 int main() {
   token = next_token();
-  cout << "=== Código ===" << endl;
+  //cout << "=== Código ===" << endl;
   S();
-  cout << endl;
-  cout << "=== Console ===" << endl;
-  cout << "=== Vars ===" << endl ;
-  cout << "=== Pilha ===" << endl ;
+  //cout << endl;
+  //cout << "=== Console ===" << endl;
+  //cout << "=== Vars ===" << endl ;
+  //cout << "=== Pilha ===" << endl ;
 
   /*
   if( token == 0 )
