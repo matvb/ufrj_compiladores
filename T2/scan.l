@@ -178,29 +178,15 @@ void F() {
       break;
     case tk_func:{
       string temp = lexema;
-      if (temp != "max" && temp != "dtos"){
-        casa(tk_func); 
-        casa( '(' );
+      casa(tk_func); 
+      casa( '(' );
+      E();
+      while (lexema == ","){
+        casa ( ',' );
         E();
-        if (lexema == ","){
-          casa ( ',' );
-          E();
-        }
-        casa ( ')' );
-        print( temp + " #" ); 
-        //Aqui daria erro, pois a função não foi definida
       }
-      else {
-        casa(tk_func); 
-        casa( '(' );
-        E();
-        if (temp == "max"){
-          casa ( ',' );
-          E();
-        }
-        casa ( ')' );
-        print( temp + " #" );
-      }
+      casa ( ')' );
+      print( temp + " #" );
     }
       break;
     default:
