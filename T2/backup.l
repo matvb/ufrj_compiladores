@@ -1,22 +1,15 @@
-/*  
-    Código feito por:
-    Mateus Villas Boas 
-    DRE: 115054675  
-*/
-
 %{
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
-#include <string>
 #include <map>
 
 using namespace std;
 
 int token;
 
-//Declaração das funções
 void S();
+void C();
 void P();
 void A();
 void E();
@@ -27,18 +20,17 @@ void F();
 void erro();
 void casa( int );
 
-//Tipos de tokens identificáveis
-enum { tk_int = 256, tk_id, tk_num, tk_print, tk_string, tk_func, tk_endl};
+enum { tk_int = 256, tk_id, tk_num, tk_print, tk_func, tk_string, tk_endl};
 
 string lexema;
 
 map<int,string> nome_tokens = {
-  { tk_id, "Nome de Identificador" },
-  { tk_num, "Número" },
-  { tk_print, "Funcao Print" },
+  { tk_id, "nome de identificador" },
+  { tk_num, "constante inteira" },
+  { tk_print, "funcao print" },
+  { tk_func, "funcoes" },
   { tk_string, "String" },
-  { tk_func, "Função" },
-  { tk_endl, "Ponto e Virgula" }
+  { tk_endl, "ponto e virgula" }
 };
 
 %}
@@ -50,18 +42,17 @@ LETRA	[A-Za-z_]
 NUM	{DIGITO}+("."{DIGITO}+)?
 ID	{LETRA}({LETRA}|{DIGITO})*
 
-ENDL [;]
-
-STRING ["]({ID}|{NUM}|[ !,.?:])*["]
+STRING ["]({ID}|[ !,.?:])*["]
 
 %%
 
 {WS}  		{ }
 {NUM} 		{ return tk_num; }
-{ENDL}    { return tk_endl; }
 "print"   { return tk_print; }
-{ID}/[(]  { return tk_func; }
+"max"     { return tk_func; }
+"dtos"    { return tk_func; }
 {STRING}  { return tk_string; }
+";"       { return tk_endl; }
 {ID}		  { return tk_id; }
 
 .		{ return yytext[0]; }
@@ -72,6 +63,47 @@ int next_token() {
   int yylex_temp = yylex();
   lexema = yytext;
   return yylex_temp;
+}
+
+int next_token2() {
+  static int look_ahead = ' ';
+  
+  while( look_ahead == ' ' || look_ahead == '\n' || look_ahead == '\r' || look_ahead == '\t' )
+     look_ahead = getchar();
+  
+  if( isdigit( look_ahead ) ) {
+    lexema = (char) look_ahead;
+    
+    look_ahead = getchar();
+    return tk_num;
+  }
+  
+  if( isalpha( look_ahead ) ) {
+    lexema = (char) look_ahead;
+    
+    look_ahead = getchar();
+    while( isalpha( look_ahead ) ) {
+      lexema += (char) look_ahead;
+    
+      look_ahead = getchar();   
+    }
+      
+    return tk_id;
+  }
+  switch( look_ahead ) {
+    case '+':
+    case '-':
+    case '*':
+    case '/':
+    case '=':
+    case '@':
+    case '#':
+    case ';':
+      int temp = look_ahead;
+      look_ahead = getchar();
+      return temp;
+  }
+  return 000;
 }
 
 string nome_token( int token ) {
@@ -89,28 +121,22 @@ void print(string x){
   cout << x + " ";
 }
 
-
 void S() {
-  switch(token) {
-    case tk_id:
-      A();
-      S();
-      break;
-    case tk_print:
-      P();
-      S();
-      break;
-    case tk_endl:
-      //Casa o ";" para possibilitar multipas linhas
-      casa (tk_endl);
-      S();
-      break;
-    case 13:
-      //Conserta um erro que da pero caracter 13 da tabela ASCII
-      casa (13);
-      S();
-      break;
+  if (token) {
+    C();
+    casa( tk_endl );
+    S();
   }
+}
+
+void C() {
+  if ( token  != tk_print) {
+    A();
+  }
+  else {
+    P();
+  }
+
 }
 
 void P() {
@@ -155,61 +181,40 @@ void T_linha() {
 
 void F() {
   switch( token ) {
-    case tk_id: {
+    case tk_id : {
       string temp = lexema;
-      casa( tk_id ); 
-      print( temp + " @" ); } 
+      casa( tk_id ); print( temp + " @" ); } 
       break;
-    case tk_num: {
+    case tk_num : {
       string temp = lexema;
-      casa( tk_num ); 
-      print( temp ); }
+      casa( tk_num ); print( temp ); }
       break;
-    case tk_string: {
+    case tk_string : {
       string temp = lexema;
-      casa( tk_string ); 
-      print( temp ); }
+      casa( tk_string ); print( temp ); }
       break;
-    case '(': {
-      //Exclui os parenteses, pois não aparecem na NPR
-      casa( '(' ); 
-      E(); 
-      casa ( ')' ); }
-      break;
-    case tk_func:{
+    case tk_func : {
       string temp = lexema;
-      if (temp != "max" && temp != "dtos"){
-        casa(tk_func); 
-        casa( '(' );
+      casa(tk_func); 
+      casa( '(' );
+      E();
+      if (temp == "max") {
+        casa ( ',' );
         E();
-        if (lexema == ","){
-          casa ( ',' );
-          E();
-        }
-        casa ( ')' );
-        print( temp + " #" ); 
-        //Aqui daria erro, pois a função não foi definida
-      }
-      else {
-        casa(tk_func); 
-        casa( '(' );
-        E();
-        if (temp == "max"){
-          casa ( ',' );
-          E();
-        }
-        casa ( ')' );
-        print( temp + " #" );
-      }
+      }      
+      casa ( ')' );
+      print( temp + " #" );
+      break;
     }
-      break;
+    case '(': 
+      casa( '(' ); E(); casa ( ')' ); break;
     default:
       erro();
   }
 }
 
 void casa( int esperado ) {
-  if( token == esperado || token == 13 )
+  if( token == esperado )
     token = next_token();
   else {
       cout << "Esperado " << nome_token( esperado ) 
