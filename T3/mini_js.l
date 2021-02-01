@@ -20,44 +20,35 @@ COMENT_UMA_LINHA    [/][/][^\n]*
 COMMENT_MULT_LINHAS [/][*]([^*]|"*"[^/])*[*][/]
 COMENTARIO          {COMENT_UMA_LINHA}|{COMMENT_MULT_LINHAS}
 
+CONDICAO (==)|(===)|(!=)|(!==)|(>)|(>=)|(<)|(<=)
 
 NEW_ARRAY \[\]
 NEW_OBJECT   \{\}
 
 %%
-"\t"            { coluna += 4; }
-" "             { coluna++; }
-"\n"	        { linha++; coluna = 1; }
-"\r"            { linha++; coluna = 1; }
-"\r\n"          { linha++; coluna = 1; }
+{WS}            { }
+"\r\n"          { }
 
 {NUM}           {   yylval.v = yytext;
-                    coluna += strlen( yytext ); 
-                    return tk_num );
+                    return tk_num;
                 }
-{STRING}	    { return retorna( tk_string ); }
+{STRING}	    { 
+                    yylval.v = yytext;
+                    return tk_string; 
+                }
 
-"print"         { return retorna( tk_print ); }
-"let"           { return retorna( tk_let ); }
-"if"            { return retorna( tk_if ); }
-"else"          { return retorna( tk_else ); }
-"while"         { return retorna( tk_while ); }
-"for"           { return retorna( tk_for   ); }
+"let"           { yylval.v = yytext; return tk_let; }
+"if"            { yylval.v = yytext; return tk_if; }
+"else"          { yylval.v = yytext; return tk_else; }
+"while"         { yylval.v = yytext; return tk_while; }
+"for"           { yylval.v = yytext; return tk_for; }
 
-{ID}            { return retorna( tk_id ); }
+{ID}            { yylval.v = yytext; return tk_id; }
 
-"=="            { return retorna( tk_igual ); }
-"==="           { return retorna( tk_estrit_igual ); }
-"!="            { return retorna( tk_dif ); }
-"!=="           { return retorna( tk_estrit_dif ); }
-">" 	        { return retorna( tk_maior ); }
-">="	        { return retorna( tk_maior_igual ); }
-"<"	            { return retorna( tk_menor ); }
-"<="	        { return retorna( tk_menor_igual ); }
+{CONDICAO}      { yylval.v = yytext; return tk_condicao; }
 
-{NEW_ARRAY}     { return retorna( tk_novo_array );}
-{NEW_OBJECT}    { return retorna( tk_novo_objeto );}
-{COMENTARIO}    { return retorna( tk_coment ); } 
+{NEW_ARRAY}     { yylval.v = yytext; return tk_novo_array;}
+{NEW_OBJECT}    { yylval.v = yytext; return tk_novo_objeto;}
 
-.               { return retorna( *yytext ); }
+.               { yylval.e = (string) "erro: " + yytext; return yytext[0]; }
 %%

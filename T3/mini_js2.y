@@ -1,17 +1,23 @@
+/*  
+    Código feito por:
+    Mateus Villas Boas 
+    DRE: 115054675  
+*/
+
 %{
 #include <string>
 #include <iostream>
 #include <map>
+#include <vector>
 
 using namespace std;
 
-//extern "C" int yylex();
+extern "C" int yylex();
 
 struct Atributos {
-  string v;
+  vector<string> v;
 };
 
-// Tipo dos atributos: YYSTYPE é o tipo usado para os atributos.
 #define YYSTYPE Atributos
 
 #define GO_TO "#"
@@ -26,8 +32,8 @@ struct Atributos {
 #define HALT "."
 
 void erro( string msg );
-void Print( string st );
-void Print( vector<string> st );
+void print( string st );
+void print( vector<string> st ); //EDIT
 
 
 int yylex();
@@ -163,7 +169,7 @@ void CREATE_FOR_LABELS(){
 
 %%
 
-Program : P { Print(solveAddresses($1.v)); Print(HALT); }
+Program : P { print(solveAddresses($1.v)); print(HALT); }
         ;
 
 P : CMD ';' P    { $$.v = $1.v + $3.v;}
@@ -280,7 +286,7 @@ F : ID                      { $$.v = $1.v +  GET; }
   | ID '.' ID               { $$.v = $1.v + GET + $3.v + GET_PROP; }
   | ID '[' E ']' '[' E ']'  { $$.v = $1.v + GET + $3.v + GET_PROP + $6.v + GET_PROP; }
   | '(' E ')'               { $$.v = $2.v; }
-  | FUNCTION '(' PARAMS ')' { Print( $1.v + GO_TO ); }
+  | FUNCTION '(' PARAMS ')' { print( $1.v + GO_TO ); }
   | NEW_ARRAY
   | NEW_OBJECT
   ;
@@ -330,11 +336,11 @@ void yyerror( const char* msg ) {
     exit( 1 );
 }
 
-void Print(string x) {
+void print(string x) {
     cout << x << " ";
 }
 
-void Print( vector<string> x ) {
+void print( vector<string> x ) {
     for(int i = 0; i < x.size(); i++) {
         cout << x[i] << " ";
     }
