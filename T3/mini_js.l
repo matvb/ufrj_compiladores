@@ -14,9 +14,6 @@ STRING (["]([^"\\\n]|\\(.|\n))*["])|[']([^'\\\n]|\\(.|\n))*[']
 
 CONDICAO (==)|(===)|(!=)|(!==)|(>)|(>=)|(<)|(<=)
 
-NEW_ARRAY \[\]
-NEW_OBJECT   \{\}
-
 %%
 "\t"             { coluna += 4; }
 " "              { coluna++; }
@@ -35,8 +32,8 @@ NEW_OBJECT   \{\}
 {ID}            { return retorna( tk_id ); }
 {CONDICAO}      { return retorna( tk_condicao ); }
 
-{NEW_ARRAY}     { return retorna( tk_novo_array );}
-{NEW_OBJECT}    { return retorna( tk_novo_objeto );}
+"{}"            { return retorna( tk_novo_array ); }
+"[]"            { return retorna( tk_novo_objeto ); }
 
 .               { return retorna( *yytext ); }
 %%

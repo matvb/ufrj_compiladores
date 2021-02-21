@@ -71,8 +71,6 @@
 
 using namespace std;
 
-extern "C" int yylex();
-
 struct Atributos {
   vector<string> v;
 };
@@ -82,7 +80,6 @@ struct Atributos {
 void Print( string st );
 void Print( vector<string> st );
 
-//EDIT colocar tudo inline
 #define GO_TO "#"
 #define GET "@"
 #define SET "="
@@ -189,7 +186,6 @@ void duplicateVariable(string variable) {
     } else {
         VariableDeclaration[variable] = linha;
     }
-
 }
 
 void CREATE_IF_LABELS(){
@@ -213,7 +209,7 @@ void CREATE_FOR_LABELS(){
 
 
 
-#line 217 "y.tab.c" /* yacc.c:339  */
+#line 213 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -287,7 +283,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 291 "y.tab.c" /* yacc.c:358  */
+#line 287 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -585,12 +581,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   169,   169,   171,   172,   175,   176,   177,   178,   182,
-     186,   193,   194,   198,   199,   202,   210,   216,   217,   220,
-     223,   224,   227,   228,   231,   232,   235,   236,   237,   238,
-     241,   242,   243,   244,   245,   248,   249,   250,   251,   252,
-     255,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     267,   270,   271,   273
+       0,   165,   165,   167,   168,   171,   172,   173,   174,   178,
+     182,   188,   189,   192,   193,   196,   204,   210,   211,   214,
+     217,   218,   221,   222,   225,   226,   229,   230,   231,   232,
+     235,   236,   237,   238,   239,   242,   243,   244,   245,   246,
+     249,   250,   251,   252,   253,   254,   255,   256,   257,   258,
+     261,   264,   265,   267
 };
 #endif
 
@@ -1445,285 +1441,285 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 169 "mini_js.y" /* yacc.c:1646  */
+#line 165 "mini_js.y" /* yacc.c:1646  */
     { Print(solveAddresses((yyvsp[0]).v)); Print(HALT); }
-#line 1451 "y.tab.c" /* yacc.c:1646  */
+#line 1447 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 171 "mini_js.y" /* yacc.c:1646  */
+#line 167 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[0]).v; }
-#line 1457 "y.tab.c" /* yacc.c:1646  */
+#line 1453 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 172 "mini_js.y" /* yacc.c:1646  */
+#line 168 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-1]).v + (yyvsp[0]).v; }
-#line 1463 "y.tab.c" /* yacc.c:1646  */
+#line 1459 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 176 "mini_js.y" /* yacc.c:1646  */
+#line 172 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[0]).v; }
-#line 1469 "y.tab.c" /* yacc.c:1646  */
+#line 1465 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 177 "mini_js.y" /* yacc.c:1646  */
+#line 173 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[0]).v; }
-#line 1475 "y.tab.c" /* yacc.c:1646  */
+#line 1471 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 178 "mini_js.y" /* yacc.c:1646  */
+#line 174 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[0]).v; }
-#line 1481 "y.tab.c" /* yacc.c:1646  */
+#line 1477 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 182 "mini_js.y" /* yacc.c:1646  */
+#line 178 "mini_js.y" /* yacc.c:1646  */
     { 
             CREATE_IF_LABELS();
             (yyval).v = (yyvsp[-3]).v + INI_IF + JUMP_TRUE + END_IF + GO_TO + (":" + INI_IF) + (yyvsp[-1]).v + END_ELSE + GO_TO + (":" + END_IF) + (yyvsp[0]).v + END_ELSE;
         }
-#line 1490 "y.tab.c" /* yacc.c:1646  */
+#line 1486 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 186 "mini_js.y" /* yacc.c:1646  */
+#line 182 "mini_js.y" /* yacc.c:1646  */
     { 
             CREATE_IF_LABELS();
             (yyval).v = (yyvsp[-2]).v + INI_IF + JUMP_TRUE + END_IF + GO_TO + (":" + INI_IF) + (yyvsp[0]).v + (":" + END_IF); 
         }
-#line 1499 "y.tab.c" /* yacc.c:1646  */
+#line 1495 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 193 "mini_js.y" /* yacc.c:1646  */
+#line 188 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-1]).v; }
-#line 1505 "y.tab.c" /* yacc.c:1646  */
+#line 1501 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 194 "mini_js.y" /* yacc.c:1646  */
+#line 189 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-1]).v; }
-#line 1511 "y.tab.c" /* yacc.c:1646  */
+#line 1507 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 198 "mini_js.y" /* yacc.c:1646  */
+#line 192 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[0]).v + ":"; }
-#line 1517 "y.tab.c" /* yacc.c:1646  */
+#line 1513 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 199 "mini_js.y" /* yacc.c:1646  */
+#line 193 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[0]).v + ":"; }
-#line 1523 "y.tab.c" /* yacc.c:1646  */
+#line 1519 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 202 "mini_js.y" /* yacc.c:1646  */
+#line 196 "mini_js.y" /* yacc.c:1646  */
     {
             string condition_for = createLabels("condition_for"), _condition_for = ':' + condition_for;
             string begin_for_closure = createLabels("begin_for_closure"), _begin_for_closure = ':' + begin_for_closure;
             string end_for = createLabels("end_for"), _end_for = ':' + end_for;
             (yyval).v = (yyvsp[-8]).v + _condition_for + (yyvsp[-6]).v + begin_for_closure + JUMP_TRUE + end_for + GO_TO + _begin_for_closure + (yyvsp[-1]).v + (yyvsp[-4]).v + condition_for + GO_TO + _end_for;
         }
-#line 1534 "y.tab.c" /* yacc.c:1646  */
+#line 1530 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 210 "mini_js.y" /* yacc.c:1646  */
+#line 204 "mini_js.y" /* yacc.c:1646  */
     {
             CREATE_WHILE_LABELS();
             (yyval).v = (":" + INI_WHILE) + (yyvsp[-2]).v + INI_WHILE_CLOSURE + JUMP_TRUE + END_WHILE + GO_TO + (":" + INI_WHILE_CLOSURE) + (yyvsp[0]).v + INI_WHILE + GO_TO + (":" + END_WHILE);
           }
-#line 1543 "y.tab.c" /* yacc.c:1646  */
+#line 1539 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 216 "mini_js.y" /* yacc.c:1646  */
+#line 210 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-1]).v; }
-#line 1549 "y.tab.c" /* yacc.c:1646  */
+#line 1545 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 217 "mini_js.y" /* yacc.c:1646  */
+#line 211 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-1]).v; }
-#line 1555 "y.tab.c" /* yacc.c:1646  */
+#line 1551 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 220 "mini_js.y" /* yacc.c:1646  */
+#line 214 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-2]).v + (yyvsp[0]).v + (yyvsp[-1]).v; }
-#line 1561 "y.tab.c" /* yacc.c:1646  */
+#line 1557 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 223 "mini_js.y" /* yacc.c:1646  */
+#line 217 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[0]).v; }
-#line 1567 "y.tab.c" /* yacc.c:1646  */
+#line 1563 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 224 "mini_js.y" /* yacc.c:1646  */
+#line 218 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[0]).v + POP; }
-#line 1573 "y.tab.c" /* yacc.c:1646  */
+#line 1569 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 227 "mini_js.y" /* yacc.c:1646  */
+#line 221 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-2]).v + (yyvsp[0]).v; }
-#line 1579 "y.tab.c" /* yacc.c:1646  */
+#line 1575 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 228 "mini_js.y" /* yacc.c:1646  */
+#line 222 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[0]).v; }
-#line 1585 "y.tab.c" /* yacc.c:1646  */
+#line 1581 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 231 "mini_js.y" /* yacc.c:1646  */
+#line 225 "mini_js.y" /* yacc.c:1646  */
     { duplicateVariable((yyvsp[0]).v[0]); (yyval).v = (yyvsp[0]).v + _LET ; }
-#line 1591 "y.tab.c" /* yacc.c:1646  */
+#line 1587 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 232 "mini_js.y" /* yacc.c:1646  */
+#line 226 "mini_js.y" /* yacc.c:1646  */
     { duplicateVariable((yyvsp[-2]).v[0]); (yyval).v = (yyvsp[-2]).v + _LET + (yyvsp[-2]).v + (yyvsp[0]).v + SET + POP; }
-#line 1597 "y.tab.c" /* yacc.c:1646  */
+#line 1593 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 235 "mini_js.y" /* yacc.c:1646  */
+#line 229 "mini_js.y" /* yacc.c:1646  */
     { nonVariable((yyvsp[-2]).v[0]); (yyval).v = (yyvsp[-2]).v + (yyvsp[0]).v + SET; }
-#line 1603 "y.tab.c" /* yacc.c:1646  */
+#line 1599 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 236 "mini_js.y" /* yacc.c:1646  */
+#line 230 "mini_js.y" /* yacc.c:1646  */
     { nonVariable((yyvsp[-2]).v[0]); (yyval).v = (yyvsp[-2]).v + (yyvsp[0]).v + SET; }
-#line 1609 "y.tab.c" /* yacc.c:1646  */
+#line 1605 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 237 "mini_js.y" /* yacc.c:1646  */
+#line 231 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-2]).v + (yyvsp[0]).v + SET_PROP; }
-#line 1615 "y.tab.c" /* yacc.c:1646  */
+#line 1611 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 238 "mini_js.y" /* yacc.c:1646  */
+#line 232 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-2]).v + (yyvsp[0]).v + SET_PROP; }
-#line 1621 "y.tab.c" /* yacc.c:1646  */
+#line 1617 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 241 "mini_js.y" /* yacc.c:1646  */
+#line 235 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-2]).v + GET + (yyvsp[0]).v; }
-#line 1627 "y.tab.c" /* yacc.c:1646  */
+#line 1623 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 242 "mini_js.y" /* yacc.c:1646  */
+#line 236 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-5]).v + GET + (yyvsp[-3]).v + GET_PROP + (yyvsp[-1]).v; }
-#line 1633 "y.tab.c" /* yacc.c:1646  */
+#line 1629 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 243 "mini_js.y" /* yacc.c:1646  */
+#line 237 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-3]).v + GET + (yyvsp[-1]).v; }
-#line 1639 "y.tab.c" /* yacc.c:1646  */
+#line 1635 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 244 "mini_js.y" /* yacc.c:1646  */
+#line 238 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-3]).v + GET + (yyvsp[-1]).v; }
-#line 1645 "y.tab.c" /* yacc.c:1646  */
+#line 1641 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 245 "mini_js.y" /* yacc.c:1646  */
+#line 239 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-6]).v + GET + (yyvsp[-4]).v + GET_PROP + (yyvsp[-1]).v; }
-#line 1651 "y.tab.c" /* yacc.c:1646  */
+#line 1647 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 248 "mini_js.y" /* yacc.c:1646  */
+#line 242 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-2]).v + (yyvsp[0]).v + "+"; }
-#line 1657 "y.tab.c" /* yacc.c:1646  */
+#line 1653 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 249 "mini_js.y" /* yacc.c:1646  */
+#line 243 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-2]).v + (yyvsp[0]).v + "-"; }
-#line 1663 "y.tab.c" /* yacc.c:1646  */
+#line 1659 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 250 "mini_js.y" /* yacc.c:1646  */
+#line 244 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-2]).v + (yyvsp[0]).v + "*"; }
-#line 1669 "y.tab.c" /* yacc.c:1646  */
+#line 1665 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 251 "mini_js.y" /* yacc.c:1646  */
+#line 245 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-2]).v + (yyvsp[0]).v + "/"; }
-#line 1675 "y.tab.c" /* yacc.c:1646  */
+#line 1671 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 255 "mini_js.y" /* yacc.c:1646  */
+#line 249 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[0]).v +  GET; }
-#line 1681 "y.tab.c" /* yacc.c:1646  */
+#line 1677 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 256 "mini_js.y" /* yacc.c:1646  */
+#line 250 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = "0" + (yyvsp[0]).v + "-"; }
-#line 1687 "y.tab.c" /* yacc.c:1646  */
+#line 1683 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 257 "mini_js.y" /* yacc.c:1646  */
+#line 251 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[0]).v; }
-#line 1693 "y.tab.c" /* yacc.c:1646  */
+#line 1689 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 258 "mini_js.y" /* yacc.c:1646  */
+#line 252 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[0]).v; }
-#line 1699 "y.tab.c" /* yacc.c:1646  */
+#line 1695 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 259 "mini_js.y" /* yacc.c:1646  */
+#line 253 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-2]).v + GET + (yyvsp[0]).v + GET_PROP; }
-#line 1705 "y.tab.c" /* yacc.c:1646  */
+#line 1701 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 260 "mini_js.y" /* yacc.c:1646  */
+#line 254 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-6]).v + GET + (yyvsp[-4]).v + GET_PROP + (yyvsp[-1]).v + GET_PROP; }
-#line 1711 "y.tab.c" /* yacc.c:1646  */
+#line 1707 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 261 "mini_js.y" /* yacc.c:1646  */
+#line 255 "mini_js.y" /* yacc.c:1646  */
     { (yyval).v = (yyvsp[-1]).v; }
-#line 1717 "y.tab.c" /* yacc.c:1646  */
+#line 1713 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 262 "mini_js.y" /* yacc.c:1646  */
+#line 256 "mini_js.y" /* yacc.c:1646  */
     { Print( (yyvsp[-3]).v + GO_TO ); }
-#line 1723 "y.tab.c" /* yacc.c:1646  */
+#line 1719 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1727 "y.tab.c" /* yacc.c:1646  */
+#line 1723 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1951,7 +1947,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 276 "mini_js.y" /* yacc.c:1906  */
+#line 270 "mini_js.y" /* yacc.c:1906  */
 
 
 #include "lex.yy.c"
