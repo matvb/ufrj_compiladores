@@ -12,3 +12,6 @@ y.tab.c: mini_js.y
 	
 clean: 
 	rm -f lex.yy.c y.tab.c saida
+
+test:
+	./saida < entrada.txt | ./interpretador

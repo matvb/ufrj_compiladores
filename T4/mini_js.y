@@ -14,6 +14,7 @@ using namespace std;
 
 struct Atributos {
   vector<string> v;
+  int parametros = 0;
 };
 
 #define YYSTYPE Atributos
@@ -31,6 +32,9 @@ void Print( vector<string> st );
 #define CALL_FUNC "$"
 #define POP "^"
 #define HALT "."
+#define UNDEFINED "undefined"
+#define RETURN_FUNCTION "'&retorno'"
+#define RET_FUNC "~"
 
 extern "C" int yylex();
 void yyerror( const char* );
@@ -52,6 +56,8 @@ string INI_FOR_CLOSURE;
 string END_FOR;
 
 vector<string> Variables;
+vector<string> Functions;
+int function_params = 0;
 map<string, int> VariableDeclaration;
 
 
@@ -154,6 +160,7 @@ void CREATE_FOR_LABELS(){
 %token tk_num tk_string tk_id
 %token tk_let tk_if tk_else tk_for tk_while
 %token tk_condicao tk_novo_array tk_novo_objeto
+%token tk_func tk_return tk_print
 
 %left  '+' '-'
 %left  '*' '/'
@@ -162,13 +169,16 @@ void CREATE_FOR_LABELS(){
 
 %%
 
-START : P { Print(solveAddresses($1.v)); Print(HALT); }
+START : P { $$.v = $1.v + HALT + Functions; Print(solveAddresses($$.v)); }
+        ;
 
 P : I       { $$.v = $1.v; }
     | I P   { $$.v = $1.v + $2.v; }
     ;
 
 I : CMD ';'
+  | FUNCTION_DECLARATION { $$.v = $1.v; }
+  | CMD_RETURN
   | CMD_IF          { $$.v = $1.v; }
   | CMD_FOR         { $$.v = $1.v; }
   | CMD_WHILE       { $$.v = $1.v; }
@@ -177,7 +187,7 @@ I : CMD ';'
 
 CMD_IF  : tk_if '(' CONDITION ')' IF_CLOSURE CMD_ELSE { 
             CREATE_IF_LABELS();
-            $$.v = $3.v + INI_IF + JUMP_TRUE + END_IF + GO_TO + (":" + INI_IF) + $5.v + END_ELSE + GO_TO + (":" + END_IF) + $6.v + END_ELSE;
+            $$.v = $3.v + INI_IF + JUMP_TRUE + (":" + INI_IF) + $6.v + END_ELSE + GO_TO + (":" + END_IF) + $6.v + END_IF + GO_TO;
         }
         | tk_if '(' CONDITION ')' IF_CLOSURE { 
             CREATE_IF_LABELS();
@@ -187,6 +197,7 @@ CMD_IF  : tk_if '(' CONDITION ')' IF_CLOSURE CMD_ELSE {
 
 IF_CLOSURE : '{' P '}' { $$.v = $2.v; }
            | CMD ';'   { $$.v = $1.v; }
+           | CMD_RETURN
            ;
 
 CMD_ELSE : tk_else IF_CLOSURE { $$.v = $2.v + ":"; }
@@ -218,6 +229,23 @@ CMD : tk_let ARGS { $$.v = $2.v; }
     | ATRIB   { $$.v = $1.v + POP; }
     ;
 
+// EDIT trocar simbolos por os defines
+FUNCTION_DECLARATION :  tk_func tk_id '(' ')' '{' P '}' { 
+                            string function = createLabels("_function"), _function = ':' + function;
+                            $$.v = $2.v + _LET + $2.v + "{}" + "=" + "'&funcao'" + function + SET_PROP + POP ;
+                            Functions = _function + $6.v + "@" + "~" + UNDEFINED + GET + GET + "~";
+                        }
+                        | tk_func tk_id '(' PARAMS ')' '{' P '}' { 
+                            string function = createLabels("_function"), _function = ':' + function;
+                            $$.v = $2.v + _LET + $2.v + "{}" + "=" + "'&funcao'" + function + SET_PROP + POP ;
+                            Functions = _function + $4.v + $7.v + UNDEFINED + "@" + RETURN_FUNCTION + GET + "~";
+                        }
+                        ;
+
+CMD_RETURN : tk_return E ';' { $$.v = $2.v + "'&retorno'" + '@' + '~'; }
+           | tk_return tk_novo_objeto '(' ARGS ')' { $$.v = $4.v + to_string($4.parametros) + $2.v + "[@]" + '$' + "'&retorno'" + '@' + '~'; }
+           ;
+
 ARGS : ATRIB_VALUE ',' ARGS { $$.v = $1.v + $3.v; }
      | ATRIB_VALUE          { $$.v = $1.v; }
      ;
@@ -243,6 +271,7 @@ E : E '+' E            { $$.v = $1.v + $3.v + "+"; }
   | E '-' E            { $$.v = $1.v + $3.v + "-"; }
   | E '*' E            { $$.v = $1.v + $3.v + "*"; }
   | E '/' E            { $$.v = $1.v + $3.v + "/"; }
+  | E '%' E            { $$.v = $1.v + $3.v + "%"; }
   | F
   ;
   
@@ -253,18 +282,26 @@ F : tk_id                       { $$.v = $1.v +  GET; }
   | tk_id '.' tk_id             { $$.v = $1.v + GET + $3.v + GET_PROP; }
   | tk_id '[' E ']' '[' E ']'   { $$.v = $1.v + GET + $3.v + GET_PROP + $6.v + GET_PROP; }
   | '(' E ')'                   { $$.v = $2.v; }
+  | tk_id '(' ')'               { $$.v = "0" + $1.v + "@" + "$"; }
+  | tk_id '(' FUNC_ARGS ')' { $$.v = $3.v + to_string($3.parametros) + $1.v + "@" + "$"; }
   | FUNCTION '(' PARAMS ')'     { Print( $1.v + GO_TO ); }
   | tk_novo_array
   | tk_novo_objeto
   ;
 
+FUNC_ARGS : E { $$.v = $1.v; $$.parametros++; }
+            | E ',' FUNC_ARGS { $$.v = $1.v + $3.v; $$.parametros = $3.parametros + 1; }
+            ;
+
 FUNCTION : tk_id
          ;
 
-PARAMS : PARAMS ',' PARAMS
+PARAMS : PARAM ',' PARAMS { $$.v = $1.v + $3.v; }
        | PARAM
+       ;
 
-PARAM : E
+PARAM : tk_num      { $$.v = $1.v; }
+      | tk_id       { $$.v = $1.v + "&" + $1.v + "arguments" + "@" + to_string(function_params++) + "[@]" + "=" + "^";}
       ;
 
 %%

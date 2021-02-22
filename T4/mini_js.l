@@ -1,4 +1,3 @@
-  
 /*  
     Código feito por:
     Mateus Villas Boas 
@@ -27,6 +26,9 @@ NEW_OBJECT   \{\}
 {NUM}           { return retorna( tk_num ); }
 {STRING}	    { return retorna( tk_string ); } 
 
+"function"      { return retorna( tk_func ); }
+"return"        { return retorna( tk_return ); }
+"print"         { return retorna( tk_print ); }
 "let"           { return retorna( tk_let ); }
 "if"            { return retorna( tk_if ); }
 "else"          { return retorna( tk_else ); }
