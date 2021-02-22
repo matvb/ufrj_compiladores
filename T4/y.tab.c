@@ -1528,7 +1528,7 @@ yyreduce:
 #line 188 "mini_js.y" /* yacc.c:1646  */
     { 
             CREATE_IF_LABELS();
-            (yyval).v = (yyvsp[-3]).v + INI_IF + JUMP_TRUE + (":" + INI_IF) + (yyvsp[0]).v + END_ELSE + GO_TO + (":" + END_IF) + (yyvsp[0]).v + END_IF + GO_TO;
+            (yyval).v = (yyvsp[-3]).v + END_IF + JUMP_TRUE + (":" + INI_IF) + (yyvsp[0]).v + INI_IF + GO_TO + (":" + END_IF) + (yyvsp[-1]).v;
         }
 #line 1534 "y.tab.c" /* yacc.c:1646  */
     break;

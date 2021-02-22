@@ -187,7 +187,7 @@ I : CMD ';'
 
 CMD_IF  : tk_if '(' CONDITION ')' IF_CLOSURE CMD_ELSE { 
             CREATE_IF_LABELS();
-            $$.v = $3.v + INI_IF + JUMP_TRUE + (":" + INI_IF) + $6.v + END_ELSE + GO_TO + (":" + END_IF) + $6.v + END_IF + GO_TO;
+            $$.v = $3.v + END_IF + JUMP_TRUE + (":" + INI_IF) + $6.v + INI_IF + GO_TO + (":" + END_IF) + $5.v;
         }
         | tk_if '(' CONDITION ')' IF_CLOSURE { 
             CREATE_IF_LABELS();
