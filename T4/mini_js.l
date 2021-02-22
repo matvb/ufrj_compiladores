@@ -26,6 +26,9 @@ NEW_OBJECT   \{\}
 {NUM}           { return retorna( tk_num ); }
 {STRING}	    { return retorna( tk_string ); } 
 
+
+"asm{".*"}"     {  return retorna_asm( tk_asm ); }
+
 "function"      { return retorna( tk_func ); }
 "return"        { return retorna( tk_return ); }
 "print"         { return retorna( tk_print ); }

@@ -39,6 +39,8 @@ void Print( vector<string> st );
 extern "C" int yylex();
 void yyerror( const char* );
 int retorna( int tk );
+int retorna_asm( int tk );
+string RemoveChar(string str, char c);
 
 int linha = 1;
 int coluna = 1;
@@ -160,7 +162,7 @@ void CREATE_FOR_LABELS(){
 %token tk_num tk_string tk_id
 %token tk_let tk_if tk_else tk_for tk_while
 %token tk_condicao tk_novo_array tk_novo_objeto
-%token tk_func tk_return tk_print
+%token tk_func tk_return tk_print tk_asm
 
 %left  '+' '-'
 %left  '*' '/'
@@ -225,9 +227,15 @@ WHILE_CLOSURE : '{' P '}' { $$.v = $2.v; }
 CONDITION   : E tk_condicao E   { $$.v = $1.v + $3.v + $2.v; }
             ;
 
-CMD : tk_let ARGS { $$.v = $2.v; }
-    | ATRIB   { $$.v = $1.v + POP; }
+CMD : tk_let ARGS   { $$.v = $2.v; }
+    | ATRIB         { $$.v = $1.v + POP; }
+    | E tk_asm 	    { $$.v = $1.v + $2.v + "^"; }
+    | E
+    | FUNCTION
     ;
+
+FUNCTION : tk_id '(' FUNC_ARGS ')' { $$.v = $3.v + to_string($3.parametros) + $1.v + "@" + "$" + "^"; }
+         ;
 
 // EDIT trocar simbolos por os defines
 FUNCTION_DECLARATION :  tk_func tk_id '(' ')' '{' P '}' { 
@@ -284,7 +292,6 @@ F : tk_id                       { $$.v = $1.v +  GET; }
   | '(' E ')'                   { $$.v = $2.v; }
   | tk_id '(' ')'               { $$.v = "0" + $1.v + "@" + "$"; }
   | tk_id '(' FUNC_ARGS ')' { $$.v = $3.v + to_string($3.parametros) + $1.v + "@" + "$"; }
-  | FUNCTION '(' PARAMS ')'     { Print( $1.v + GO_TO ); }
   | tk_novo_array
   | tk_novo_objeto
   ;
@@ -292,9 +299,6 @@ F : tk_id                       { $$.v = $1.v +  GET; }
 FUNC_ARGS : E { $$.v = $1.v; $$.parametros++; }
             | E ',' FUNC_ARGS { $$.v = $1.v + $3.v; $$.parametros = $3.parametros + 1; }
             ;
-
-FUNCTION : tk_id
-         ;
 
 PARAMS : PARAM ',' PARAMS { $$.v = $1.v + $3.v; }
        | PARAM
@@ -339,6 +343,27 @@ int retorna( int tk ) {
     coluna += strlen( yytext ); 
 
     return tk;
+}
+
+int retorna_asm( int tk ) {
+    string yytext_temp = RemoveChar(yytext + 3, '{');
+    yytext_temp = RemoveChar(yytext_temp, '}') ;
+    vector<string> v{yytext_temp};
+    yylval.v = v; 
+    coluna += strlen( yytext ); 
+
+    return tk;
+}
+
+string RemoveChar(string str, char c) {
+   string result;
+   for (size_t i = 0; i < str.size(); i++) 
+   {
+          char currentChar = str[i];
+          if (currentChar != c)
+              result += currentChar;
+   }
+       return result;
 }
 
 void yyerror( const char* msg ) {
